@@ -1,0 +1,27 @@
+{
+  "name": "fiveserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fiveserver.js",
+  "scripts": {
+    "start": "node fiveserver.js",
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scheifs/fiveserver.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scheifs/fiveserver/issues"
+  },
+  "homepage": "https://github.com/scheifs/fiveserver#readme",
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "cucumber": "^5.1.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.490.0"
+  }
+}
