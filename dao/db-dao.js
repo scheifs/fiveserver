@@ -63,42 +63,22 @@ class DBDao {
                     resolve(data);
                 }
             });
-            
-
         });
-
-        // var params = {
-        //     Item: {
-        //      "Email": {
-        //        S: "scheifs@gmail.com"
-        //       }, 
-        //      "Password": {
-        //        S: "abc123"
-        //       }    
-        //     }, 
-        //     ReturnConsumedCapacity: "TOTAL", 
-        //     TableName: "Users"
-        //    };
-          
-
 
     }
 
-    getItem() {
+    getItem(params) {
 
+        return new Promise((resolve, reject)  => {
 
-        var params = {
-            Key: {
-             "Email": {
-               S: "scheifs@gmail.com"
-              }
-            }, 
-            TableName: "Users"
-           };
-           this.dynamodb.getItem(params, function(err, data) {
-             if (err) console.log(err, err.stack); // an error occurred
-             else     console.log(data); 
-           });
+            this.dynamodb.getItem(params, function (err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
         
     }
 }

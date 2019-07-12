@@ -69,11 +69,37 @@ describe('dbdao put item', () => {
   test('promise rejects with error when put item failure', async () => {
 
     const dynamodbMock = {
-      putItem: jest.fn((params, cb) => cb('create failed'))
+      putItem: jest.fn((params, cb) => cb('put item failed'))
     }
     dbdao = new DBDao(dynamodbMock);
 
-    await expect(dbdao.putItem({})).rejects.toEqual('create failed');
+    await expect(dbdao.putItem({})).rejects.toEqual('put item failed');
+
+  });
+
+});
+
+describe('dbdao get item', () => {
+  
+  test('promise resolves with response when get item was successful', async () => {
+
+    const dynamodbMock = {
+      getItem: jest.fn((params, cb) => cb(null,"data"))
+    }
+    dbdao = new DBDao(dynamodbMock);
+
+    await expect(dbdao.getItem({})).resolves.toEqual('data');
+
+  });
+
+  test('promise rejects with error when put item failure', async () => {
+
+    const dynamodbMock = {
+      getItem: jest.fn((params, cb) => cb('get item failed'))
+    }
+    dbdao = new DBDao(dynamodbMock);
+
+    await expect(dbdao.getItem({})).rejects.toEqual('get item failed');
 
   });
 
