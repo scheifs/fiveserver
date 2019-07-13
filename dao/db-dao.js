@@ -1,86 +1,28 @@
-const AWS = require('aws-sdk');
+const MongoClient = require('mongodb').MongoClient;
 
 class DBDao {
 
-    constructor(mydynamodb) {
-        if (mydynamodb === undefined) {
-            mydynamodb = new AWS.DynamoDB({
-                endpoint: `http://localhost:8000`,
-                region: `us-east-1`
-            });
-        }
-        this.dynamodb = mydynamodb;
+    constructor(_client) {
+        this.client = _client;
     }
 
-    deleteTable(table) {
+    connect() {
 
         return new Promise((resolve, reject) => {
 
-            const params = {
-                TableName: table
-            };
-            this.dynamodb.deleteTable(params, function (err, data) {
+            this.client.connect((err) => {
                 if (err) {
+                    console.log(`Connecting to mongo error ${err}`);
                     reject(err);
                 } else {
-                    resolve(data);
+                    console.log("Connected successfully to mongo");
+                    resolve();
                 }
-            });
-
+                
+              });
         });
     }
 
-    createTable(TableName, AttributeDefinitions, KeySchema, ProvisionedThroughput) {
-
-        return new Promise((resolve, reject) => {
-
-            const params = {
-                TableName,
-                AttributeDefinitions,
-                KeySchema,
-                ProvisionedThroughput
-            };
-            this.dynamodb.createTable(params, function (err, data) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            });
-
-        });
-
-    }
-
-    putItem(params) {
-
-        return new Promise((resolve, reject)  => {
-
-            this.dynamodb.putItem(params, function (err, data) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            });
-        });
-
-    }
-
-    getItem(params) {
-
-        return new Promise((resolve, reject)  => {
-
-            this.dynamodb.getItem(params, function (err, data) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            });
-        });
-        
-    }
 }
 
 module.exports = DBDao;

@@ -1,106 +1,29 @@
 const DBDao = require('../../dao/db-dao')
 
 
-describe('dbdao delete table', () => {
+describe('dbdao connect', () => {
   
-  test('promise resolves with response when delete table successful', async () => {
+  test('promise resolves when connection successful', async () => {
 
-    const dynamodbMock = {
-      deleteTable: jest.fn((params, cb) => cb(null,"data"))
+    const clientMock = {
+      connect: jest.fn((cb) => cb())
     }
-    dbdao = new DBDao(dynamodbMock);
+    const dbdao = new DBDao(clientMock);
 
-    await expect(dbdao.deleteTable('table')).resolves.toEqual('data');
-
+    await expect(dbdao.connect()).resolves;
+   
   });
 
-  test('promise rejects with error when delete table failure', async () => {
+  test('promise rejects with connection error on failure', async () => {
 
-    const dynamodbMock = {
-      deleteTable: jest.fn((params, cb) => cb('delete failed'))
+    const clientMock = {
+      connect: jest.fn((cb) => cb('connection error'))
     }
-    dbdao = new DBDao(dynamodbMock);
+    const dbdao = new DBDao(clientMock);
 
-    await expect(dbdao.deleteTable('table')).rejects.toEqual('delete failed');
-
+    await expect(dbdao.connect()).rejects.toEqual('connection error');
+   
   });
 
-});
-
-describe('dbdao create table', () => {
-  
-  test('promise resolves with response when create table successful', async () => {
-
-    const dynamodbMock = {
-      createTable: jest.fn((params, cb) => cb(null,"data"))
-    }
-    dbdao = new DBDao(dynamodbMock);
-
-    await expect(dbdao.createTable('table')).resolves.toEqual('data');
-
-  });
-
-  test('promise rejects with error when create table failure', async () => {
-
-    const dynamodbMock = {
-      createTable: jest.fn((params, cb) => cb('create failed'))
-    }
-    dbdao = new DBDao(dynamodbMock);
-
-    await expect(dbdao.createTable('table')).rejects.toEqual('create failed');
-
-  });
-
-});
-
-describe('dbdao put item', () => {
-  
-  test('promise resolves with response when put item was successful', async () => {
-
-    const dynamodbMock = {
-      putItem: jest.fn((params, cb) => cb(null,"data"))
-    }
-    dbdao = new DBDao(dynamodbMock);
-
-    await expect(dbdao.putItem({})).resolves.toEqual('data');
-
-  });
-
-  test('promise rejects with error when put item failure', async () => {
-
-    const dynamodbMock = {
-      putItem: jest.fn((params, cb) => cb('put item failed'))
-    }
-    dbdao = new DBDao(dynamodbMock);
-
-    await expect(dbdao.putItem({})).rejects.toEqual('put item failed');
-
-  });
-
-});
-
-describe('dbdao get item', () => {
-  
-  test('promise resolves with response when get item was successful', async () => {
-
-    const dynamodbMock = {
-      getItem: jest.fn((params, cb) => cb(null,"data"))
-    }
-    dbdao = new DBDao(dynamodbMock);
-
-    await expect(dbdao.getItem({})).resolves.toEqual('data');
-
-  });
-
-  test('promise rejects with error when put item failure', async () => {
-
-    const dynamodbMock = {
-      getItem: jest.fn((params, cb) => cb('get item failed'))
-    }
-    dbdao = new DBDao(dynamodbMock);
-
-    await expect(dbdao.getItem({})).rejects.toEqual('get item failed');
-
-  });
 
 });
