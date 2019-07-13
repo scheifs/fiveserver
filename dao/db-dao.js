@@ -1,5 +1,3 @@
-const MongoClient = require('mongodb').MongoClient;
-
 class DBDao {
 
     constructor(_client) {

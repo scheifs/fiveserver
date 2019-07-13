@@ -18,8 +18,9 @@
   },
   "homepage": "https://github.com/scheifs/fiveserver#readme",
   "devDependencies": {
-    "jest": "^24.8.0",
-    "cucumber": "^5.1.0"
+    "cucumber": "^5.1.0",
+    "eslint": "^6.0.1",
+    "jest": "^24.8.0"
   },
   "dependencies": {
     "mongodb": "^3.2.7"
