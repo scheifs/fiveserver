@@ -40,6 +40,7 @@ exports.deleteUsers = async (req, res, next, userService) => {
 }
 
 exports.updateUser = async (req, res, next, userService) => {
+    // TODO: check to make sure password is not being updates.. special case...
     try {
         await userService.updateUser(req.params.userid, req.body);
         res.send(200);

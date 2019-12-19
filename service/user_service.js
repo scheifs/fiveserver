@@ -13,6 +13,7 @@ class UserService {
         newUser.email = user.email;
         newUser.salt = crypto.randomBytes(32).toString('hex');
         newUser.passwordHash = await hashPassword(user.password,newUser.salt);
+        newUser.nickname = user.email.substring(0,user.email.indexOf('@'));
         
         const duplicateUser = await this.getUserByEmail(user.email);
         if (duplicateUser) {
@@ -30,12 +31,17 @@ class UserService {
         return await this.dbdao.findOneWithSearchCriteria('five', 'users', { email });
     }
 
-    async deleteUsers() {
-        return await this.dbdao.deleteMany('five', 'users', {});
+    async deleteUsers(criteria = {}) {
+        return await this.dbdao.deleteMany('five', 'users', criteria);
     }
 
     async updateUser(userid, updates) {
         return await this.dbdao.findUserAndUpdate('five', 'users', { _id: new ObjectId(userid) }, updates);
+    }
+
+    async isPasswordCorrect(rawPassword, salt, passwordHash) {
+        const hash = await hashPassword(rawPassword,salt);
+        return hash === passwordHash;
     }
 
 }

@@ -6,7 +6,7 @@ class DBDao {
     }
 
     async connect() {
-
+        console.log('Attempting to connect to mongo db');
         this.client.connect((err) => {
             if (err) {
                 console.log(`Connecting to mongo error ${err}`);
@@ -15,6 +15,16 @@ class DBDao {
                 console.log("Connected successfully to mongo");
             }
         });
+    }
+
+    async disconnect() {
+        
+        try {
+            await this.client.logout();
+            console.log('disconnected');
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async insert(database, collection, document) {
@@ -33,7 +43,7 @@ class DBDao {
         const db = this.client.db(database);
         const dbCollection = db.collection(collection);
         return await dbCollection.findOne(searchCriteria);
-            
+
     }
 
     async deleteMany(database, collection, criteria) {
@@ -49,7 +59,7 @@ class DBDao {
             "$set": {}
         };
         updateQuery.$set = updates;
-        const updatedUser = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnNewDocument: true});
+        const updatedUser = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnNewDocument: true });
         return updatedUser;
     }
 
