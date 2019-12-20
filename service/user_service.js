@@ -3,8 +3,10 @@ const ObjectId = require('mongodb').ObjectID;
 
 class UserService {
 
-    constructor(dbdao) {
+    constructor(dbdao, database = 'five', collection = 'users') {
         this.dbdao = dbdao;
+        this.database = database;
+        this.collection = collection;
     }
 
     async addUser(user) {
@@ -19,24 +21,29 @@ class UserService {
         if (duplicateUser) {
             throw { error: 'duplicate user'};
         } else {
-            return await this.dbdao.insert('five', 'users', newUser);
+            return await this.dbdao.insert(this.database, this.collection, newUser);
         }
     }
 
     async getUserById(id) {
-        return await this.dbdao.findOneWithSearchCriteria('five', 'users', { _id: new ObjectId(id) });
+            return await this.dbdao.findOneWithSearchCriteria(this.database, 'users', { _id: new ObjectId(id) });
     }
 
     async getUserByEmail(email) {
-        return await this.dbdao.findOneWithSearchCriteria('five', 'users', { email });
+        return await this.dbdao.findOneWithSearchCriteria(this.database, this.collection, { email });
     }
 
     async deleteUsers(criteria = {}) {
-        return await this.dbdao.deleteMany('five', 'users', criteria);
+        return await this.dbdao.deleteMany(this.database, this.collection, criteria);
     }
 
     async updateUser(userid, updates) {
-        return await this.dbdao.findUserAndUpdate('five', 'users', { _id: new ObjectId(userid) }, updates);
+        const updateResponse = await this.dbdao.findUserAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
+        if (updateResponse.ok === 1) {
+            return updateResponse.value;
+        } else {
+            throw { error: 'update failed'};
+        }
     }
 
     async isPasswordCorrect(rawPassword, salt, passwordHash) {

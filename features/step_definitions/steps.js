@@ -7,7 +7,7 @@ const DBDAO = require('../../dao/db-dao');
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 const dbdao = new DBDAO(client);
-const userService = new UserService(dbdao);
+const userService = new UserService(dbdao,'fiveatdd','users');
 
 const endpoint = 'http://localhost:8080';
 
@@ -19,24 +19,49 @@ async function deleteTestUser() {
     });
 }
 
-async function addTestUser() {
-    return await axios.post(`${endpoint}/api/users`, {
-        email: 'test@test.com',
+async function addTestUser(payload = {
+    email: 'test@test.com',
+    password: 'abc123'
+}) {
+    return await axios.post(`${endpoint}/api/users`, payload);
+}
+
+async function getTestUser(id, token) {
+    const testUser = await axios.get(`${endpoint}/api/users/${id}`, {
+        headers: {
+            "X-Auth-Token": token
+        }
+    });
+    return testUser;
+}
+
+async function getTestToken(id) {
+    const tokenResponse = await axios.post(`${endpoint}/api/token`, {
+        id,
         password: 'abc123'
     });
+    return tokenResponse.data.token;
+}
+
+async function patchUser(id, token, patchPayload) {
+    const patchedUser = await axios.patch(`${endpoint}/api/users/${id}`, patchPayload, {
+        headers: {
+            "X-Auth-Token": token
+        }
+    });
+    return patchedUser;
 }
 
 Given('the API is available', function () {
-    // Write code here that turns the phrase above into concrete actions
-    // return 'pending';
+
 });
 
 When('the client request to get a json web token', async () => {
 
     await deleteTestUser();
-    await addTestUser();
+    const newUser = await addTestUser();
     const tokenResponse = await axios.post(`${endpoint}/api/token`, {
-        email: 'test@test.com',
+        id: newUser.data._id,
         password: 'abc123'
     });
     httpStatus = tokenResponse.status;
@@ -68,6 +93,52 @@ When('the client request to add an existing user via POST \\/api\\/users', async
 
 });
 
+When('the client request to get an existing user via GET \\/api\\/users\\/:userid', async () => {
+
+    await deleteTestUser();
+    const testUser = await addTestUser();
+    const token = await getTestToken(testUser.data._id);
+    try {
+        const getUserResponse = await getTestUser(testUser.data._id, token);
+        httpStatus = getUserResponse.status;
+        expect(getUserResponse.data.email).toBe('test@test.com');
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
+
+});
+
+When('the client request to get an existing user with no token to GET \\/api\\/users\\/:userid', async () => {
+
+    await deleteTestUser();
+    const testUser = await addTestUser();
+    try {
+        await getTestUser(testUser.data._id, null);
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
+
+});
+
+When('the client request to update an existing user via PATCH \\/api\\/users\\/:userid', async () => {
+
+    await deleteTestUser();
+    const testUser = await addTestUser();
+
+    expect(testUser.data.email).toBe('test@test.com');
+    const token = await getTestToken(testUser.data._id);
+    try {
+        const patchedUser = await patchUser(testUser.data._id, token, {
+            email: 'test2@test.com'
+        });
+        expect(patchedUser.data.email).toBe('test2@test.com');
+        httpStatus = patchedUser.status;
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
+
+});
+
 Then('the response should be HTTP {string}', function (status) {
     expect(httpStatus).toBe(Number(status));
 });
@@ -77,6 +148,7 @@ After(async () => {
 });
 
 AfterAll(async () => {
+    userService.deleteUsers({});
     await client.close();
     await dbdao.disconnect();
 });

@@ -32,12 +32,23 @@ describe('dbdao insert', () => {
 
   test('promise resolves when insert is successful', async () => {
 
-    const clientMock = {
-      connect: jest.fn((cb) => cb('connection error'))
+    const dbCollectionMock = {
+      insertOne: jest.fn(() => {
+        ops: [
+          "insert"
+        ]
+      })
+    };
+    const dbMock = {
+      collection: jest.fn(() => dbCollectionMock)
     }
+    const clientMock = {
+      db: jest.fn((database) => dbMock)   
+    }
+    console.log(clientMock.db('blah'));
     const dbdao = new DBDao(clientMock);
 
-    await expect(dbdao.connect()).rejects.toEqual('connection error');
+    await expect(dbdao.insert('db','collection',{})).resolve.toEqual('connection error');
 
 
 

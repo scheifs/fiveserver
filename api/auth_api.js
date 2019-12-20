@@ -8,31 +8,41 @@ exports.authorizeApiRequest = async (req, res, next) => {
         return next();
     } else {
         const token = req.headers['x-auth-token'];
-        try {
-            await jwt.verify(token, secretkey);
-            return next();
-        } catch (err) {
-            res.send(401, err);
-            res.end();
-        }
+        jwt.verify(token, secretkey, (err, decoded) => {
+            if (err) {
+                res.send(401, err);
+                res.end();
+            } else {
+                req.five = {
+                    email: decoded.email,
+                    id: decoded._id
+                }
+                return next();
+            }
+        });
     }
 }
 
 exports.getToken = async (req, res, next, userService) => {
 
-    const foundUser = await userService.getUserByEmail(req.body.email);
-    const isPasswordCorrect = await userService.isPasswordCorrect(req.body.password, foundUser.salt, foundUser.passwordHash);
-
-    if (isPasswordCorrect) {
-        const token = jwt.sign({
-            _id: foundUser._id,
-            email: foundUser.email
-        }, secretkey, { expiresIn: '24h' });
-        res.send(200, { token });
-        next();
-    } else {
+    // const foundUser = await userService.getUserByEmail(req.body.email);
+    const foundUser = await userService.getUserById(req.body.id);
+    if (!foundUser) {
         res.send(401);
         res.end();
+    } else {
+        const isPasswordCorrect = await userService.isPasswordCorrect(req.body.password, foundUser.salt, foundUser.passwordHash);
+        if (isPasswordCorrect) {
+            const token = jwt.sign({
+                _id: foundUser._id,
+                email: foundUser.email
+            }, secretkey, { expiresIn: '24h' });
+            res.send(200, { token });
+            next();
+        } else {
+            res.send(401);
+            res.end();
+        }
     }
 
 }

@@ -1,8 +1,10 @@
 exports.getUser = async (req, res, next, userService) => {
+    console.log('get user');
     try {
-        const user = await userService.getUserById(req.params.userid);
+        const user = await userService.getUserById(req.five.id);
         res.send(200, user);
     } catch (err) {
+        console.log(err);
         res.send(500,err);
     } finally {
         next();
@@ -42,8 +44,8 @@ exports.deleteUsers = async (req, res, next, userService) => {
 exports.updateUser = async (req, res, next, userService) => {
     // TODO: check to make sure password is not being updates.. special case...
     try {
-        await userService.updateUser(req.params.userid, req.body);
-        res.send(200);
+        const updatedUser = await userService.updateUser(req.five.id, req.body);
+        res.send(200, updatedUser);
     } catch (err) {
         console.log(err);
         res.send(500,err);

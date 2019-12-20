@@ -42,7 +42,9 @@ class DBDao {
 
         const db = this.client.db(database);
         const dbCollection = db.collection(collection);
-        return await dbCollection.findOne(searchCriteria);
+        const resp = await dbCollection.findOne(searchCriteria);
+        console.log(resp);
+        return resp;
 
     }
 
@@ -59,7 +61,7 @@ class DBDao {
             "$set": {}
         };
         updateQuery.$set = updates;
-        const updatedUser = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnNewDocument: true });
+        const updatedUser = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnOriginal: false });
         return updatedUser;
     }
 
