@@ -16,6 +16,7 @@ class UserService {
         newUser.salt = crypto.randomBytes(32).toString('hex');
         newUser.passwordHash = await hashPassword(user.password,newUser.salt);
         newUser.nickname = user.email.substring(0,user.email.indexOf('@'));
+        newUser.games = [];
         
         const duplicateUser = await this.getUserByEmail(user.email);
         if (duplicateUser) {
@@ -43,6 +44,17 @@ class UserService {
             return updateResponse.value;
         } else {
             throw { error: 'update failed'};
+        }
+    }
+
+    async addGame(userid, gameid) {
+        const validGame = await this.dbdao.findOneWithSearchCriteria(this.database, 'games', { _id: new ObjectId(gameid) });
+        console.log('****');
+        console.log(validGame);
+        if (validGame) {
+            return await this.dbdao.addToSet(this.database, this.collection, { _id: new ObjectId(userid) }, { games: gameid});
+        } else {
+            throw { error: `gameid: ${gameid} not valid`}
         }
     }
 

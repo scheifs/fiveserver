@@ -42,10 +42,17 @@ class DBDao {
 
         const db = this.client.db(database);
         const dbCollection = db.collection(collection);
-        const resp = await dbCollection.findOne(searchCriteria);
-        console.log(resp);
-        return resp;
+        return await dbCollection.findOne(searchCriteria);
+        
+    }
 
+    async findWithSearchCriteria(database, collection, searchCriteria) {
+
+        const db = this.client.db(database);
+        const dbCollection = db.collection(collection);
+        const resp = await dbCollection.find(searchCriteria);
+        return await resp.toArray();
+ 
     }
 
     async deleteMany(database, collection, criteria) {
@@ -54,15 +61,32 @@ class DBDao {
         return await dbCollection.deleteMany(criteria);
     }
 
-    async findUserAndUpdate(database, collection, findQuery, updates) {
+    async replaceOne(database, collection, filter, replacement) {
+        const db = this.client.db(database);
+        const dbCollection = db.collection(collection);
+        return await dbCollection.replaceOne(filter,replacement);
+    }
+
+    async findOneAndUpdate(database, collection, findQuery, updates) {
         const db = this.client.db(database);
         const dbCollection = db.collection(collection);
         const updateQuery = {
             "$set": {}
         };
         updateQuery.$set = updates;
-        const updatedUser = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnOriginal: false });
-        return updatedUser;
+        const updated = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnOriginal: false });
+        return updated;
+    }
+
+    async addToSet(database, collection, findQuery, setToAdd) {
+        const db = this.client.db(database);
+        const dbCollection = db.collection(collection);
+        const updateQuery = {
+            "$addToSet": {}
+        };
+        updateQuery.$addToSet = setToAdd;
+        const updated = await dbCollection.updateOne(findQuery, updateQuery, { returnOriginal: false});
+        return updated;
     }
 
 }

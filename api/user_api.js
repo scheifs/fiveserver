@@ -5,11 +5,11 @@ exports.getUser = async (req, res, next, userService) => {
         res.send(200, user);
     } catch (err) {
         console.log(err);
-        res.send(500,err);
+        res.send(500, err);
     } finally {
         next();
     }
-    
+
 }
 
 exports.addUser = async (req, res, next, userService) => {
@@ -35,7 +35,7 @@ exports.deleteUsers = async (req, res, next, userService) => {
         res.send(200);
     } catch (err) {
         console.log(err);
-        res.send(500,err);
+        res.send(500, err);
     } finally {
         next();
     }
@@ -48,7 +48,19 @@ exports.updateUser = async (req, res, next, userService) => {
         res.send(200, updatedUser);
     } catch (err) {
         console.log(err);
-        res.send(500,err);
+        res.send(500, err);
+    } finally {
+        next();
+    }
+}
+
+exports.addGame = async (req, res, next, userService) => {
+    try {
+        const updated = await userService.addGame(req.params.userid,req.body.gameid);
+        res.send(200, updated);
+    } catch (err) {
+        console.log(err);
+        res.send(500, err);
     } finally {
         next();
     }
