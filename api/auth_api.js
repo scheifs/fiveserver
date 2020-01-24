@@ -3,25 +3,25 @@ const secretkey = process.env.secretkey;
 
 exports.authorizeApiRequest = async (req, res, next) => {
 
-    // const uri = req.getRoute().path;
-    // if ((req.method === 'POST' && uri === '/api/users') || uri === '/api/token') {
-    //     return next();
-    // } else {
-    //     const token = req.headers['x-auth-token'];
-    //     jwt.verify(token, secretkey, (err, decoded) => {
-    //         if (err) {
-    //             res.send(401, err);
-    //             res.end();
-    //         } else {
-    //             req.five = {
-    //                 email: decoded.email,
-    //                 id: decoded._id
-    //             }
-    //             return next();
-    //         }
-    //     });
-    // }
-    next();
+    const uri = req.getRoute().path;
+    if ((req.method === 'POST' && uri === '/api/users') || uri === '/api/token' || uri === '/api/health') {
+        return next();
+    } else {
+        const token = req.headers['x-auth-token'];
+        jwt.verify(token, secretkey, (err, decoded) => {
+            if (err) {
+                res.send(401, err);
+                res.end();
+            } else {
+                req.five = {
+                    email: decoded.email,
+                    id: decoded._id
+                }
+                return next();
+            }
+        });
+    }
+
 }
 
 exports.getToken = async (req, res, next, userService) => {

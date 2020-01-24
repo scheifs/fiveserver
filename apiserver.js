@@ -23,6 +23,10 @@ server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
 server.use((req,res,next) => authApi.authorizeApiRequest(req, res, next));
 
+server.get('/api/health', (req, res) => {
+  res.send(200);
+});
+
 server.post('/api/token', (req, res, next) => authApi.getToken(req, res, next, userService));
 
 server.get('/api/users/:userid', (req, res, next) => userApi.getUser(req, res, next, userService));

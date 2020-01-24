@@ -15,7 +15,7 @@ exports.getUser = async (req, res, next, userService) => {
 exports.addUser = async (req, res, next, userService) => {
     try {
         const user = await userService.addUser(req.body);
-        console.log('user_api user: ' + user);
+        console.log(`user_api user: ${JSON.stringify(user, null, 2)}`);
         res.send(201, user);
     } catch (err) {
         if (err.error === 'duplicate user') {
@@ -42,7 +42,8 @@ exports.deleteUsers = async (req, res, next, userService) => {
 }
 
 exports.updateUser = async (req, res, next, userService) => {
-    // TODO: check to make sure password is not being updates.. special case...
+    // TODO: check to make sure password is not being updated.. special case...
+    console.log(req.body);
     try {
         const updatedUser = await userService.updateUser(req.five.id, req.body);
         res.send(200, updatedUser);

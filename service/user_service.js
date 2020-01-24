@@ -14,20 +14,20 @@ class UserService {
         const newUser = {};
         newUser.email = user.email;
         newUser.salt = crypto.randomBytes(32).toString('hex');
-        newUser.passwordHash = await hashPassword(user.password,newUser.salt);
-        newUser.nickname = user.email.substring(0,user.email.indexOf('@'));
+        newUser.passwordHash = await hashPassword(user.password, newUser.salt);
+        newUser.nickname = user.email.substring(0, user.email.indexOf('@'));
         newUser.games = [];
-        
+
         const duplicateUser = await this.getUserByEmail(user.email);
         if (duplicateUser) {
-            throw { error: 'duplicate user'};
+            throw { error: 'duplicate user' };
         } else {
             return await this.dbdao.insert(this.database, this.collection, newUser);
         }
     }
 
     async getUserById(id) {
-            return await this.dbdao.findOneWithSearchCriteria(this.database, 'users', { _id: new ObjectId(id) });
+        return await this.dbdao.findOneWithSearchCriteria(this.database, 'users', { _id: new ObjectId(id) });
     }
 
     async getUserByEmail(email) {
@@ -39,11 +39,11 @@ class UserService {
     }
 
     async updateUser(userid, updates) {
-        const updateResponse = await this.dbdao.findUserAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
+        const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
         if (updateResponse.ok === 1) {
             return updateResponse.value;
         } else {
-            throw { error: 'update failed'};
+            throw { error: 'update failed' };
         }
     }
 
@@ -52,14 +52,14 @@ class UserService {
         console.log('****');
         console.log(validGame);
         if (validGame) {
-            return await this.dbdao.addToSet(this.database, this.collection, { _id: new ObjectId(userid) }, { games: gameid});
+            return await this.dbdao.addToSet(this.database, this.collection, { _id: new ObjectId(userid) }, { games: gameid });
         } else {
-            throw { error: `gameid: ${gameid} not valid`}
+            throw { error: `gameid: ${gameid} not valid` }
         }
     }
 
     async isPasswordCorrect(rawPassword, salt, passwordHash) {
-        const hash = await hashPassword(rawPassword,salt);
+        const hash = await hashPassword(rawPassword, salt);
         return hash === passwordHash;
     }
 
