@@ -139,6 +139,25 @@ When('the client request to update an existing user via PATCH \\/api\\/users\\/:
 
 });
 
+When('the client request to update an existing user passwordHash\\/salt via PATCH \\/api\\/users\\/:userid', async () => {
+
+    await deleteTestUser();
+    const testUser = await addTestUser();
+
+    const token = await getTestToken(testUser.data._id);
+    try {
+        const patchedUser = await patchUser(testUser.data._id, token, {
+            passwordHash: `newhash`,
+            salt: `pepper`
+        });
+        expect(patchedUser.data.email).toBe('test2@test.com');
+        httpStatus = patchedUser.status;
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
+
+});
+
 Then('the response should be HTTP {string}', function (status) {
     expect(httpStatus).toBe(Number(status));
 });

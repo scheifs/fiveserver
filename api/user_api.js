@@ -44,20 +44,25 @@ exports.deleteUsers = async (req, res, next, userService) => {
 exports.updateUser = async (req, res, next, userService) => {
     // TODO: check to make sure password is not being updated.. special case...
     console.log(req.body);
-    try {
-        const updatedUser = await userService.updateUser(req.five.id, req.body);
-        res.send(200, updatedUser);
-    } catch (err) {
-        console.log(err);
-        res.send(500, err);
-    } finally {
+    if (req.body && (req.body.passwordHash !== undefined || req.body.salt !== undefined)) {
+        res.send(400);
         next();
+    } else {
+        try {
+            const updatedUser = await userService.updateUser(req.five.id, req.body);
+            res.send(200, updatedUser);
+        } catch (err) {
+            console.log(err);
+            res.send(500, err);
+        } finally {
+            next();
+        }
     }
 }
 
 exports.addGame = async (req, res, next, userService) => {
     try {
-        const updated = await userService.addGame(req.params.userid,req.body.gameid);
+        const updated = await userService.addGame(req.params.userid, req.body.gameid);
         res.send(200, updated);
     } catch (err) {
         console.log(err);

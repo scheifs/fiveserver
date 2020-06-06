@@ -34,21 +34,27 @@ describe('dbdao insert', () => {
 
     const dbCollectionMock = {
       insertOne: jest.fn(() => {
-        ops: [
-          "insert"
-        ]
+        return {
+          ops: [
+            "insert"
+          ]
+        }
       })
     };
+
+
+    console.log(dbCollectionMock.insertOne('doc'));
+
     const dbMock = {
       collection: jest.fn(() => dbCollectionMock)
     }
     const clientMock = {
-      db: jest.fn((database) => dbMock)   
+      db: jest.fn((database) => dbMock)
     }
-    console.log(clientMock.db('blah'));
+
     const dbdao = new DBDao(clientMock);
 
-    await expect(dbdao.insert('db','collection',{})).resolve.toEqual('connection error');
+    await expect(dbdao.insert('db', 'collection', {})).resolves.toEqual('insert');
 
 
 

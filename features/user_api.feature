@@ -31,7 +31,13 @@ Scenario: Test get user API
 	Then the response should be HTTP '401'
 
 @PatchUser
-Scenario: Test update user API
+Scenario: Test patch user API
 	Given the API is available
 	When the client request to update an existing user via PATCH /api/users/:userid
 	Then the response should be HTTP '200'
+
+@PatchUserError
+Scenario: Test patch user API
+	Given the API is available
+	When the client request to update an existing user passwordHash/salt via PATCH /api/users/:userid
+	Then the response should be HTTP '400'

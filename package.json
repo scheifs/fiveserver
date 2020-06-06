@@ -20,15 +20,15 @@
   },
   "homepage": "https://github.com/scheifs/fiveserver#readme",
   "devDependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "cucumber": "^5.1.0",
-    "eslint": "^6.7.2",
+    "eslint": "^6.8.0",
     "jest": "^24.9.0"
   },
   "dependencies": {
     "crypto": "^1.0.1",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.4.0",
+    "mongodb": "^3.5.8",
     "restify": "^8.5.1"
   }
 }

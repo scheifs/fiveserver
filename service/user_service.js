@@ -49,7 +49,6 @@ class UserService {
 
     async addGame(userid, gameid) {
         const validGame = await this.dbdao.findOneWithSearchCriteria(this.database, 'games', { _id: new ObjectId(gameid) });
-        console.log('****');
         console.log(validGame);
         if (validGame) {
             return await this.dbdao.addToSet(this.database, this.collection, { _id: new ObjectId(userid) }, { games: gameid });

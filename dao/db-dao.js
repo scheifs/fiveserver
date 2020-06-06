@@ -29,7 +29,7 @@ class DBDao {
 
     async insert(database, collection, document) {
         try {
-            const db = this.client.db(database);
+            const db = this.client.db(database);            
             const dbres = await db.collection(collection).insertOne(document);
             return dbres.ops[0];
         } catch (err) {
