@@ -62,7 +62,16 @@ describe('dbdao insert', () => {
 
   test('promise rejects with error on insert failure', async () => {
 
+    const err = "error";
 
+    const clientMock = {
+      connect: jest.fn((cb) => cb(clientMock)),
+      db: jest.fn(() => { throw err})
+    }
+
+    const dbdao = new DBDao(clientMock);
+    
+    await expect(dbdao.insert('db', 'collection', {})).rejects.toEqual('error');
 
 
   });
