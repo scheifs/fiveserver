@@ -5,7 +5,7 @@
   "main": "fiveserver.js",
   "scripts": {
     "start": "node apiserver.js",
-    "test": "jest --coverage",
+    "test": "jest",
     "debug": "nodemon --inspect apiserver.js",
     "cucumber": "./node_modules/.bin/cucumber-js"
   },

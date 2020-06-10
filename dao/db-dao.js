@@ -29,8 +29,8 @@ class DBDao {
 
     async insert(database, collection, document) {
         try {
-            const db = this.client.db(database);            
-            const dbres = await db.collection(collection).insertOne(document);
+            const dbCollection = this.getDBCollection(database, collection);          
+            const dbres = await dbCollection.insertOne(document);
             return dbres.ops[0];
         } catch (err) {
             console.log(err);
@@ -40,36 +40,31 @@ class DBDao {
 
     async findOneWithSearchCriteria(database, collection, searchCriteria) {
 
-        const db = this.client.db(database);
-        const dbCollection = db.collection(collection);
+        const dbCollection = this.getDBCollection(database, collection);
         return await dbCollection.findOne(searchCriteria);
         
     }
 
     async findWithSearchCriteria(database, collection, searchCriteria) {
 
-        const db = this.client.db(database);
-        const dbCollection = db.collection(collection);
+        const dbCollection = this.getDBCollection(database, collection);
         const resp = await dbCollection.find(searchCriteria);
         return await resp.toArray();
  
     }
 
     async deleteMany(database, collection, criteria) {
-        const db = this.client.db(database);
-        const dbCollection = db.collection(collection);
+        const dbCollection = this.getDBCollection(database, collection);
         return await dbCollection.deleteMany(criteria);
     }
 
     async replaceOne(database, collection, filter, replacement) {
-        const db = this.client.db(database);
-        const dbCollection = db.collection(collection);
+        const dbCollection = this.getDBCollection(database, collection);
         return await dbCollection.replaceOne(filter,replacement);
     }
 
     async findOneAndUpdate(database, collection, findQuery, updates) {
-        const db = this.client.db(database);
-        const dbCollection = db.collection(collection);
+        const dbCollection = this.getDBCollection(database, collection);
         const updateQuery = {
             "$set": {}
         };
@@ -79,8 +74,7 @@ class DBDao {
     }
 
     async addToSet(database, collection, findQuery, setToAdd) {
-        const db = this.client.db(database);
-        const dbCollection = db.collection(collection);
+        const dbCollection = this.getDBCollection(database, collection);
         const updateQuery = {
             "$addToSet": {}
         };
@@ -89,6 +83,11 @@ class DBDao {
         return updated;
     }
 
+    getDBCollection(database, collection) {
+        const db = this.client.db(database);
+        const dbCollection = db.collection(collection);
+        return dbCollection;
+    }
 }
 
 module.exports = DBDao;

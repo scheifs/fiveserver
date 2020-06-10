@@ -49,7 +49,7 @@ describe('dbdao insert', () => {
       collection: jest.fn(() => dbCollectionMock)
     }
     const clientMock = {
-      db: jest.fn((database) => dbMock)
+      db: jest.fn(() => dbMock)
     }
 
     const dbdao = new DBDao(clientMock);
