@@ -15,8 +15,9 @@ exports.getGameById = async (req, res, next, gameService) => {
 exports.addGame = async (req, res, next, gameService) => {
    
     try {
-        await gameService.addGame(req.body);
-        res.send(200);
+        const addedGame = await gameService.addGame(req.body);
+        res.set('Location',`/api/games/${addedGame._id}`)
+        res.send(201, addedGame);
     } catch (err) {
         res.send(500,err);
         res.end();

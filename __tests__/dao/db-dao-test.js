@@ -232,3 +232,143 @@ describe('deleteMany', () => {
 
 });
 
+describe('replaceOne', () => {
+
+  let dbCollectionMock;
+  let databaseMock;
+  let clientMock;
+  let dbdao;
+
+  beforeEach(() => {
+
+    dbCollectionMock = jest.fn();
+
+    databaseMock = {
+      collection: jest.fn(() => dbCollectionMock)
+    }
+
+    clientMock = {
+      db: jest.fn(() => databaseMock)
+    }
+
+    dbdao = new DBDao(clientMock);
+  });
+
+  test('promise resolves with replaceOne many result', async () => {
+
+    dbCollectionMock = {
+      replaceOne: jest.fn(() => { return "replaceOne"})
+    };  
+    
+    await expect(dbdao.replaceOne(databaseMock, "collection", "filter", "replacement")).resolves.toBe('replaceOne');
+
+    expect(dbCollectionMock.replaceOne).toHaveBeenCalledWith("filter","replacement");
+
+  });
+
+  test('promise rejects with error on replaceOne failure', async () => {
+
+    dbCollectionMock = {
+      replaceOne: jest.fn(() => { throw "replaceOne error"})
+    };  
+    
+    await expect(dbdao.replaceOne(databaseMock, "collection", {})).rejects.toBe('replaceOne error');
+
+  });
+
+
+});
+
+
+describe('findOneAndUpdate', () => {
+
+  let dbCollectionMock;
+  let databaseMock;
+  let clientMock;
+  let dbdao;
+
+  beforeEach(() => {
+
+    dbCollectionMock = jest.fn();
+
+    databaseMock = {
+      collection: jest.fn(() => dbCollectionMock)
+    }
+
+    clientMock = {
+      db: jest.fn(() => databaseMock)
+    }
+
+    dbdao = new DBDao(clientMock);
+  });
+
+  test('promise resolves with findOneAndUpdate many result', async () => {
+
+    dbCollectionMock = {
+      findOneAndUpdate: jest.fn(() => { return "findOneAndUpdate"})
+    };  
+    
+    await expect(dbdao.findOneAndUpdate(databaseMock, "collection", "findquery", "updates")).resolves.toBe('findOneAndUpdate');
+
+
+  });
+
+  test('promise rejects with error on findOneAndUpdate failure', async () => {
+
+    dbCollectionMock = {
+      findOneAndUpdate: jest.fn(() => { throw "findOneAndUpdate error"})
+    };  
+    
+    await expect(dbdao.findOneAndUpdate(databaseMock, "collection", "findquery", "updates")).rejects.toBe('findOneAndUpdate error');
+
+  });
+
+
+});
+
+describe('addToSet', () => {
+
+  let dbCollectionMock;
+  let databaseMock;
+  let clientMock;
+  let dbdao;
+
+  beforeEach(() => {
+
+    dbCollectionMock = jest.fn();
+
+    databaseMock = {
+      collection: jest.fn(() => dbCollectionMock)
+    }
+
+    clientMock = {
+      db: jest.fn(() => databaseMock)
+    }
+
+    dbdao = new DBDao(clientMock);
+  });
+
+  test('promise resolves with addToSet many result', async () => {
+
+    dbCollectionMock = {
+      updateOne: jest.fn(() => { return "addToSet"})
+    };  
+    
+    await expect(dbdao.addToSet(databaseMock, "collection", "findquery", "updates")).resolves.toBe('addToSet');
+
+
+  });
+
+  test('promise rejects with error on addToSet failure', async () => {
+
+    dbCollectionMock = {
+      updateOne: jest.fn(() => { throw "addToSet error"})
+    };  
+    
+    await expect(dbdao.addToSet(databaseMock, "collection", "findquery", "updates")).rejects.toBe('addToSet error');
+
+  });
+
+
+});
+

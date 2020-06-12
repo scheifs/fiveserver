@@ -167,7 +167,7 @@ After(async () => {
 });
 
 AfterAll(async () => {
-    userService.deleteUsers({});
+    // userService.deleteUsers({});
     await client.close();
     await dbdao.disconnect();
 });

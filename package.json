@@ -21,9 +21,9 @@
   "homepage": "https://github.com/scheifs/fiveserver#readme",
   "devDependencies": {
     "axios": "^0.19.2",
-    "cucumber": "^5.1.0",
-    "eslint": "^6.8.0",
-    "jest": "^24.9.0"
+    "cucumber": "^6.0.5",
+    "eslint": "^7.2.0",
+    "jest": "^26.0.1"
   },
   "dependencies": {
     "crypto": "^1.0.1",
