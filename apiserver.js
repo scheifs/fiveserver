@@ -1,3 +1,4 @@
+const process = require('process');
 const restify = require('restify');
 const userApi = require('./api/user_api');
 const gameApi = require('./api/game_api');
