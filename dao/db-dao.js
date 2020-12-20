@@ -2,7 +2,7 @@ class DBDao {
 
     constructor(_client) {
         this.client = _client;
-        this.connect();
+        // this.connect();
     }
 
     async connect() {

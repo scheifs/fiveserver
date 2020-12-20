@@ -33,7 +33,8 @@ describe('dbdao disconnect', () => {
   test('client calls logout on disconnect', async () => {
 
     const clientMock = {
-      logout: jest.fn()
+      logout: jest.fn(),
+      connect: jest.fn((cb) => cb())
     };
     const dbdao = new DBDao(clientMock);
 
@@ -62,7 +63,8 @@ describe('dbdao insert', () => {
       collection: jest.fn(() => dbCollectionMock)
     }
     const clientMock = {
-      db: jest.fn(() => dbMock)
+      db: jest.fn(() => dbMock),
+      connect: jest.fn((cb) => cb())
     }
 
     const dbdao = new DBDao(clientMock);
@@ -107,7 +109,8 @@ describe('findOneWithSearchCriteria', () => {
     }
 
     clientMock = {
-      db: jest.fn(() => databaseMock)
+      db: jest.fn(() => databaseMock),
+      connect: jest.fn((cb) => cb())
     }
 
     dbdao = new DBDao(clientMock);
@@ -152,7 +155,8 @@ describe('findWithSearchCriteria', () => {
     }
 
     clientMock = {
-      db: jest.fn(() => databaseMock)
+      db: jest.fn(() => databaseMock),
+      connect: jest.fn((cb) => cb())
     }
 
     dbdao = new DBDao(clientMock);
@@ -203,7 +207,8 @@ describe('deleteMany', () => {
     }
 
     clientMock = {
-      db: jest.fn(() => databaseMock)
+      db: jest.fn(() => databaseMock),
+      connect: jest.fn((cb) => cb())
     }
 
     dbdao = new DBDao(clientMock);
@@ -248,7 +253,8 @@ describe('replaceOne', () => {
     }
 
     clientMock = {
-      db: jest.fn(() => databaseMock)
+      db: jest.fn(() => databaseMock),
+      connect: jest.fn((cb) => cb())
     }
 
     dbdao = new DBDao(clientMock);
@@ -296,7 +302,8 @@ describe('findOneAndUpdate', () => {
     }
 
     clientMock = {
-      db: jest.fn(() => databaseMock)
+      db: jest.fn(() => databaseMock),
+      connect: jest.fn((cb) => cb())
     }
 
     dbdao = new DBDao(clientMock);
@@ -342,7 +349,8 @@ describe('addToSet', () => {
     }
 
     clientMock = {
-      db: jest.fn(() => databaseMock)
+      db: jest.fn(() => databaseMock),
+      connect: jest.fn((cb) => cb())
     }
 
     dbdao = new DBDao(clientMock);
