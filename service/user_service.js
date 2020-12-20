@@ -14,7 +14,7 @@ class UserService {
         const newUser = {};
         newUser.email = user.email;
         newUser.salt = crypto.randomBytes(32).toString('hex');
-        newUser.passwordHash = await hashPassword(user.password, newUser.salt);
+        newUser.passwordHash = await this.hashPassword(user.password, newUser.salt);
         newUser.nickname = user.email.substring(0, user.email.indexOf('@'));
         newUser.games = [];
 
@@ -38,18 +38,17 @@ class UserService {
         return await this.dbdao.deleteMany(this.database, this.collection, criteria);
     }
 
-    async updateUser(userid, updates) {
-        const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
-        if (updateResponse.ok === 1) {
-            return updateResponse.value;
-        } else {
-            throw { error: 'update failed' };
-        }
-    }
+    // async updateUser(userid, updates) {
+    //     const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
+    //     if (updateResponse.ok === 1) {
+    //         return updateResponse.value;
+    //     } else {
+    //         throw { error: 'update failed' };
+    //     }
+    // }
 
     async addGame(userid, gameid) {
         const validGame = await this.dbdao.findOneWithSearchCriteria(this.database, 'games', { _id: new ObjectId(gameid) });
-        console.log(validGame);
         if (validGame) {
             return await this.dbdao.addToSet(this.database, this.collection, { _id: new ObjectId(userid) }, { games: gameid });
         } else {
@@ -58,24 +57,24 @@ class UserService {
     }
 
     async isPasswordCorrect(rawPassword, salt, passwordHash) {
-        const hash = await hashPassword(rawPassword, salt);
+        const hash = await this.hashPassword(rawPassword, salt);
         return hash === passwordHash;
     }
 
-}
+    hashPassword(pwd, salt) {
 
-function hashPassword(pwd, salt) {
-
-    return new Promise(function (resolve, reject) {
-        crypto.pbkdf2(pwd, salt, 100000, 512, 'sha512', (err, key) => {
-            if (err) {
-                reject(err);
-            }
-            const hash = key.toString('hex');
-            resolve(hash);
+        return new Promise(function (resolve, reject) {
+            crypto.pbkdf2(pwd, salt, 100000, 512, 'sha512', (err, key) => {
+                if (err) {
+                    reject(err);
+                }
+                const hash = key.toString('hex');
+                resolve(hash);
+            });
         });
-    });
-    // https://nodejs.org/api/crypto.html#crypto_crypto_pbkdf2_password_salt_iterations_keylen_digest_callback
+        // https://nodejs.org/api/crypto.html#crypto_crypto_pbkdf2_password_salt_iterations_keylen_digest_callback
+    }
+
 }
 
 module.exports = UserService;
