@@ -1,4 +1,4 @@
-const { setDefaultTimeout, Given, When, Then, AfterAll, After } = require("cucumber");
+const { setDefaultTimeout, Given, When, Then, AfterAll, After } = require("@cucumber/cucumber");
 const expect = require('expect');
 const UserService = require('../../service/user_service');
 const axios = require('axios');
