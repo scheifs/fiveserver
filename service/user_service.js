@@ -38,14 +38,14 @@ class UserService {
         return await this.dbdao.deleteMany(this.database, this.collection, criteria);
     }
 
-    // async updateUser(userid, updates) {
-    //     const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
-    //     if (updateResponse.ok === 1) {
-    //         return updateResponse.value;
-    //     } else {
-    //         throw { error: 'update failed' };
-    //     }
-    // }
+    async updateUser(userid, updates) {
+        const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
+        if (updateResponse.ok === 1) {
+            return updateResponse.value;
+        } else {
+            throw { error: 'update failed' };
+        }
+    }
 
     async addGame(userid, gameid) {
         const validGame = await this.dbdao.findOneWithSearchCriteria(this.database, 'games', { _id: new ObjectId(gameid) });
