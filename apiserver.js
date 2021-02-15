@@ -37,10 +37,10 @@ server.del('/api/users', (req, res, next) => userApi.deleteUsers(req, res, next,
 // /users/:userid
 server.get('/api/users/:userid', (req, res, next) => userApi.getUser(req, res, next, userService));
 server.patch('/api/users/:userid', (req, res, next) => userApi.updateUser(req,res,next,userService));
-
-
 server.post('/api/users/:userid/games', (req, res, next) => userApi.addGame(req, res, next, userService));
-server.post('/api/users/:userid/games/:gameid/move', (req, res, next) => gameApi.move(req, res, next, gameService));
+
+// /games/:gameid
+server.post('/api/games/:gameid/move', (req, res, next) => gameApi.move(req, res, next, gameService));
 server.get('/api/games/:gameid', (req, res, next) => gameApi.getGameById(req,res,next,gameService));
 server.post('/api/games', (req, res, next) => gameApi.addGame(req,res,next,gameService));
 

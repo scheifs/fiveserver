@@ -30,6 +30,7 @@ exports.addGame = async (req, res, next, gameService) => {
 exports.move = async (req, res, next, gameService) => {
 
     try {
+        // TODO: get user id from req object
         const game = await gameService.getGameById(req.params.gameid);
         await gameService.move(game,req.params.userid,req.body);
         res.send(200);
