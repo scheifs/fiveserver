@@ -60,7 +60,7 @@ class GameService {
                 { num: 16, x: 6, y: 3 },
                 { num: 36, x: 7, y: 3 },
                 { num: 37, x: 8, y: 3 },
-                { num: 98, x: 9, y: 3 }],
+                { num: 97, x: 9, y: 3 }],
                 [{ num: 77, x: 0, y: 4 },
                 { num: 54, x: 1, y: 4 },
                 { num: 23, x: 2, y: 4 },
@@ -145,7 +145,8 @@ class GameService {
     async saveGame(game) {
         const saveGameResult = await this.dbdao.replaceOne(this.database, this.collection, { _id: new ObjectId(game._id) }, game);
         if (saveGameResult.result.ok === 1) {
-            return saveGameResult.ops[0];
+            // return saveGameResult.ops[0];
+            return game;
         } else {
             throw { error: 'mongo db save game error'}
         }
