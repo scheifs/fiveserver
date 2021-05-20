@@ -159,7 +159,7 @@ When('the client request to update an existing user passwordHash\\/salt via PATC
 });
 
 Then('the response should be HTTP {string}', function (status) {
-    expect(httpStatus).toBe(Number(status));
+    expect(Number(httpStatus)).toBe(Number(status));
 });
 
 After(async () => {

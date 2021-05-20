@@ -1,4 +1,5 @@
 const ObjectId = require('mongodb').ObjectID;
+const debug = require('debug')('fiveserver')
 
 class GameService {
 
@@ -127,6 +128,7 @@ class GameService {
     }
 
     async move(game, playerId, movePayload) {
+      
         if (movePayload.move === "Draw") {
             return await this.drawCard(game, playerId, movePayload);
         } else if (movePayload.move === "Play") {
@@ -150,7 +152,11 @@ class GameService {
     }
 
     async drawCard(game, playerId, movePayload) {
+        debug(game,playerId);
         const player = this.findPlayerWithPlayerId(game, playerId);
+        if (player.cards.length >= 4) {
+            throw { error: `full hand`}
+        }
         player.cards.push(game.deck.pop());
         game.moves.push({
             player: playerId,

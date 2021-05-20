@@ -1,35 +1,27 @@
+const process = require('process');
+
 class DBDao {
 
     constructor(_client) {
         this.client = _client;
-        this.connect();
+        if (process.env.NODE_ENV !== 'test') {
+            this.connect();
+        }
     }
 
     async connect() {
         console.log('Attempting to connect to mongo db');
-        this.client.connect((err) => {
-            if (err) {
-                console.log(`Connecting to mongo error ${err}`);
-                throw err;
-            } else {
-                console.log("Connected successfully to mongo");
-            }
-        });
+        await this.client.connect();
     }
 
     async disconnect() {
-        
-        try {
-            await this.client.logout();
-            console.log('disconnected');
-        } catch (err) {
-            console.log(err);
-        }
+        console.log('Attempting to close to mongo db');
+        await this.client.close();
     }
 
     async insert(database, collection, document) {
         try {
-            const dbCollection = this.getDBCollection(database, collection);          
+            const dbCollection = this.getDBCollection(database, collection);
             const dbres = await dbCollection.insertOne(document);
             return dbres.ops[0];
         } catch (err) {
@@ -42,7 +34,7 @@ class DBDao {
 
         const dbCollection = this.getDBCollection(database, collection);
         return await dbCollection.findOne(searchCriteria);
-        
+
     }
 
     async findWithSearchCriteria(database, collection, searchCriteria) {
@@ -50,7 +42,7 @@ class DBDao {
         const dbCollection = this.getDBCollection(database, collection);
         const resp = await dbCollection.find(searchCriteria);
         return await resp.toArray();
- 
+
     }
 
     async deleteMany(database, collection, criteria) {
@@ -60,7 +52,7 @@ class DBDao {
 
     async replaceOne(database, collection, filter, replacement) {
         const dbCollection = this.getDBCollection(database, collection);
-        return await dbCollection.replaceOne(filter,replacement);
+        return await dbCollection.replaceOne(filter, replacement);
     }
 
     async findOneAndUpdate(database, collection, findQuery, updates) {
@@ -79,7 +71,7 @@ class DBDao {
             "$addToSet": {}
         };
         updateQuery.$addToSet = setToAdd;
-        const updated = await dbCollection.updateOne(findQuery, updateQuery, { returnOriginal: false});
+        const updated = await dbCollection.updateOne(findQuery, updateQuery, { returnOriginal: false });
         return updated;
     }
 

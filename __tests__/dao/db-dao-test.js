@@ -6,7 +6,7 @@ describe('dbdao connect', () => {
   test('promise resolves when connection successful', async () => {
 
     const clientMock = {
-      connect: jest.fn((cb) => cb())
+      connect: jest.fn(() => "connected")
     }
     const dbdao = new DBDao(clientMock);
 
@@ -17,7 +17,7 @@ describe('dbdao connect', () => {
   test('promise rejects with connection error on failure', async () => {
 
     const clientMock = {
-      connect: jest.fn((cb) => cb('connection error'))
+      connect: jest.fn(() => { throw 'connection error'})
     }
     const dbdao = new DBDao(clientMock);
 
@@ -33,13 +33,12 @@ describe('dbdao disconnect', () => {
   test('client calls logout on disconnect', async () => {
 
     const clientMock = {
-      logout: jest.fn(),
-      connect: jest.fn((cb) => cb())
+      close: jest.fn(),
     };
     const dbdao = new DBDao(clientMock);
 
     await dbdao.disconnect();
-    expect(clientMock.logout).toHaveBeenCalled();
+    expect(clientMock.close).toHaveBeenCalled();
 
   });
 

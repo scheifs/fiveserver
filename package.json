@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node apiserver.js",
     "test": "jest --coverage",
-    "debug": "nodemon --inspect apiserver.js",
+    "debug": "set DEBUG=fiveserver && nodemon --inspect apiserver.js",
     "cucumber": "./node_modules/.bin/cucumber-js"
   },
   "repository": {
@@ -20,15 +20,16 @@
   },
   "homepage": "https://github.com/scheifs/fiveserver#readme",
   "devDependencies": {
-    "@cucumber/cucumber": "^7.0.0",
+    "@cucumber/cucumber": "^7.2.1",
     "axios": "^0.21.1",
-    "eslint": "^7.20.0",
+    "eslint": "^7.26.0",
     "jest": "^26.6.3"
   },
   "dependencies": {
     "crypto": "^1.0.1",
+    "debug": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.6.4",
+    "mongodb": "^3.6.6",
     "restify": "^8.5.1"
   }
 }
