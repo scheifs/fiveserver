@@ -134,7 +134,7 @@ class GameService {
         } else if (movePayload.move === "Play") {
             return await this.playCard(game, playerId, movePayload);
         } else {
-            throw { error: `move not supported ${movePayload}`};
+            throw { error: `move not supported ${JSON.stringify(movePayload)}`};
         }
     }
 
