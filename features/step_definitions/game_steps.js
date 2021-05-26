@@ -28,7 +28,7 @@ async function createNewUser(email, password) {
     const token1 = await axios.post(`${endpoint}/api/token`, {
         id: newUser.data._id,
         password: password
-    });       
+    });
     return {
         token: token1.data.token,
         id: newUser.data._id,
@@ -41,12 +41,10 @@ async function createNewUser(email, password) {
 Given('the game API is available AND there are two users', async () => {
 
     if (!user1) {
-        user1 = await createNewUser('user1@test.com','abc123');
-        console.log(user1);
+        user1 = await createNewUser('user1@test.com', 'abc123');
     }
     if (!user2) {
-        user2 = await createNewUser('user2@test.com','abc123');
-        console.log(user2);
+        user2 = await createNewUser('user2@test.com', 'abc123');
     }
 
 });
@@ -66,9 +64,8 @@ When('the client request a new game', async () => {
             "X-Auth-Token": user1.token
         }
     });
-    console.dir(gameResponse.data);
-    game = gameResponse.data;
 
+    game = gameResponse.data;
     httpStatus = gameResponse.status;
 
 });
@@ -79,15 +76,17 @@ When('the player request a new card with a full hand', async function () {
         move: 'Draw'
     };
 
-    const moveResponse = await axios.post(`${endpoint}/api/games/${game.id}/move`, movePayload, {
-        headers: {
-            "X-Auth-Token": user1.token
-        }
-    });
+    try {
+        await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
+            headers: {
+                "X-Auth-Token": user1.token
+            }
+        });
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
 
-    console.log(moveResponse);
 
-    
 });
 
 

@@ -15,7 +15,6 @@ exports.getUser = async (req, res, next, userService) => {
 exports.addUser = async (req, res, next, userService) => {
     try {
         const user = await userService.addUser(req.body);
-        console.log(`user_api user: ${JSON.stringify(user, null, 2)}`);
         res.send(201, user);
     } catch (err) {
         if (err.error === 'duplicate user') {

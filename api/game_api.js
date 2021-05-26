@@ -1,3 +1,5 @@
+const debug = require('debug')('fiveserver');
+
 exports.getGameById = async (req, res, next, gameService) => {
    
     try {
@@ -37,14 +39,14 @@ exports.addGame = async (req, res, next, gameService) => {
 
 exports.move = async (req, res, next, gameService) => {
 
-    try {      
+    try {  
         const game = await gameService.getGameById(req.params.gameid);
         await gameService.move(game,req.five.id,req.body);
         res.send(200);
     } catch (err) {
-        console.log(`move error: ${err}`);
-        if (err.error === 'hand full') {
-            res.send(403, 'hand full');
+        console.log(`move error: ${JSON.stringify(err)}`);
+        if (err.error === 'full hand') {
+            res.send(403, 'full hand');
             res.end();
         } else {
             res.send(500,err);
