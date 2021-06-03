@@ -45,12 +45,17 @@ exports.move = async (req, res, next, gameService) => {
         res.send(200);
     } catch (err) {
         console.log(`move error: ${JSON.stringify(err)}`);
-        if (err.error === 'full hand') {
-            res.send(403, 'full hand');
-            res.end();
-        } else {
-            res.send(500,err);
-            res.end();
+        switch (err.error) {
+            case `invalid play`:
+            case `full hand`: {
+                res.send(403, err.error);
+                res.end();
+                break;
+            }
+            default: {
+                res.send(500,err);
+                res.end();
+            }
         }
     } finally {
         next();

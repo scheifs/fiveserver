@@ -18,6 +18,7 @@ class GameService {
             lastUpdated: new Date(),
             deck: this.getNewShuffledDeck(),
             players: postbody.players,
+            playersTurnId: postbody.players[0].userid,
             moves: [],
             turnNumber: 0,
             board: [
@@ -154,7 +155,7 @@ class GameService {
 
     async drawCard(game, playerId, movePayload) {
         debug(game,playerId);
-        const player = this.findPlayerWithPlayerId(game, playerId);
+        const player = GameService.findPlayerWithPlayerId(game, playerId);
         if (player.cards.length >= 4) {
             throw { error: `full hand`}
         }
@@ -167,7 +168,13 @@ class GameService {
     }
 
     async playCard(game, playerId, movePayload) {
-        const player = this.findPlayerWithPlayerId(game, playerId);
+        if (movePayload.card > movePayload.boardNumber) {
+            throw { error: `invalid play`};
+        }
+        const player = GameService.findPlayerWithPlayerId(game, playerId);
+        if (!player.cards.find(card => card === movePayload.card)) {
+            throw { error: `invalid play`};
+        }
         player.cards = player.cards.filter(item => item !== movePayload.card);
         const boardElement = this.findBoardElementAtBoardNumber(game.board, movePayload.boardNumber);
         boardElement.color = player.color;
@@ -180,6 +187,14 @@ class GameService {
         return await this.saveGame(game);
     }
 
+    static findPlayerWithPlayerId(game, playerid) {
+        return game.players.find(player => {
+            if (player.userid.toString() === playerid.toString()) {
+                return true;
+            }
+        });
+    }
+
     findBoardElementAtBoardNumber(board, boardNumber) {
         for (let x = 0; x < 10; x++) {
             for (let y = 0; y < 10; y++) {
@@ -188,14 +203,6 @@ class GameService {
                 }
             }
         }
-    }
-
-    findPlayerWithPlayerId(game, playerid) {
-        return game.players.find(player => {
-            if (player.userid.toString() === playerid.toString()) {
-                return true;
-            }
-        });
     }
 
     shuffle(array) {

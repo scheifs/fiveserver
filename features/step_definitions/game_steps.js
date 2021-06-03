@@ -8,6 +8,7 @@ const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 const dbdao = new DBDAO(client);
 const userService = new UserService(dbdao, 'fiveatdd', 'users');
+const gameService = require('../../service/game_service');
 
 const endpoint = 'http://localhost:8080';
 let httpStatus;
@@ -15,6 +16,7 @@ let httpStatus;
 let user1;
 let user2;
 let game;
+let gameResponse;
 
 async function createNewUser(email, password) {
 
@@ -59,7 +61,7 @@ When('the client request a new game', async () => {
         ]
     };
 
-    const gameResponse = await axios.post(`${endpoint}/api/games`, gamePost, {
+    gameResponse = await axios.post(`${endpoint}/api/games`, gamePost, {
         headers: {
             "X-Auth-Token": user1.token
         }
@@ -77,7 +79,7 @@ When('the player request a new card with a full hand', async function () {
     };
 
     try {
-        await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
+        gameResponse = await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
             headers: {
                 "X-Auth-Token": user1.token
             }
@@ -86,6 +88,49 @@ When('the player request a new card with a full hand', async function () {
         httpStatus = err.response.status;
     }
 
+});
+
+When('the player plays a high card into an empty lower space', async function () {
+
+    const player = gameService.findPlayerWithPlayerId(game, game.playersTurnId);
+    const sortedCards = player.cards.sort();
+    console.log(sortedCards);
+
+    const movePayload = {
+        move: 'Play',
+        card: sortedCards[3],
+        boardNumber: 0
+    }
+
+    try {
+        gameResponse = await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
+            headers: {
+                "X-Auth-Token": user1.token
+            }
+        });
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
+
+});
+
+When('the player plays a card they dont hold', async function () {
+
+    const movePayload = {
+        move: 'Play',
+        card: -1,
+        boardNumber: 0
+    }
+
+    try {
+        gameResponse = await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
+            headers: {
+                "X-Auth-Token": user1.token
+            }
+        });
+    } catch (err) {
+        httpStatus = err.response.status;
+    }
 
 });
 
