@@ -195,13 +195,15 @@ When('move played into occupied board number', async function () {
     const player = gameService.findPlayerWithPlayerId(game, game.playersTurnId);
     const sortedCards = player.cards.sort();
 
+    const boardSpot = sortedCards[3];
+
     const movePayload = {
         move: 'Play',
         card: sortedCards[3],
         boardNumber: sortedCards[3]
     }
 
-    gameResponse = await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
+    await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
         headers: {
             "X-Auth-Token": user1.token
         }
@@ -214,8 +216,8 @@ When('move played into occupied board number', async function () {
 
     const movePayload2 = {
         move: 'Play',
-        card: sortedCards2[3],
-        boardNumber: sortedCards2[3]
+        card: sortedCards2[0],
+        boardNumber: boardSpot
     }
 
     try {
