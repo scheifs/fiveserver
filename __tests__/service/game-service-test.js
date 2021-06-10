@@ -40,6 +40,7 @@ test('move - draw success', async () => {
     const game = {
         deck: [23],
         moves: [],
+        turnNumber: 1,
         players: [
             { userid: '1', cards: [1, 2, 3] }
         ]
@@ -68,6 +69,7 @@ test('move - play card success', async () => {
     const game = {
         deck: [23],
         moves: [],
+        turnNumber: 1,
         board: [
             [{ num: 99, x: 9, y: 1 }]],
         players: [
