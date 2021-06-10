@@ -42,7 +42,7 @@ exports.move = async (req, res, next, gameService) => {
     try {  
         const game = await gameService.getGameById(req.params.gameid);
         await gameService.move(game,req.five.id,req.body);
-        res.send(200);
+        res.send(200, game);
     } catch (err) {
         console.log(`move error: ${JSON.stringify(err)}`);
         switch (err.error) {

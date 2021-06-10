@@ -20,7 +20,7 @@ class GameService {
             players: postbody.players,
             playersTurnId: postbody.players[0].userid,
             moves: [],
-            turnNumber: 0,
+            turnNumber: 1,
             board: [
                 [{ num: 73, x: 0, y: 0 },
                 { num: 72, x: 1, y: 0 },
@@ -153,6 +153,13 @@ class GameService {
         }
     }
 
+    getNextTurnPlayersId(players, nextTurnNumber) {
+
+        const mod = (nextTurnNumber-1) % players.length;
+        return players[mod].userid;
+
+    }
+
     async drawCard(game, playerId, movePayload) {
         debug(game,playerId);
         const player = GameService.findPlayerWithPlayerId(game, playerId);
@@ -160,6 +167,8 @@ class GameService {
             throw { error: `full hand`}
         }
         player.cards.push(game.deck.pop());
+        game.turnNumber++;
+        game.playersTurnId = this.getNextTurnPlayersId(game.players, game.turnNumber);
         game.moves.push({
             player: playerId,
             move: "Draw"
@@ -178,6 +187,8 @@ class GameService {
         player.cards = player.cards.filter(item => item !== movePayload.card);
         const boardElement = this.findBoardElementAtBoardNumber(game.board, movePayload.boardNumber);
         boardElement.color = player.color;
+        game.turnNumber++;
+        game.playersTurnId = this.getNextTurnPlayersId(game.players, game.turnNumber);
         game.moves.push({
             player: playerId,
             move: "Play",
