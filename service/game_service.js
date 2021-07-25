@@ -1,4 +1,4 @@
-const ObjectId = require('mongodb').ObjectID;
+const { ObjectId } = require('mongodb');
 const debug = require('debug')('fiveserver')
 
 class GameService {
@@ -10,7 +10,7 @@ class GameService {
     }
 
     async getGameById(id) {
-        return await this.dbdao.findOneWithSearchCriteria(this.database, this.collection, { _id: new ObjectId(id) });
+        return await this.dbdao.findOneWithSearchCriteria(this.database, this.collection, { _id: ObjectId(id) });
     }
 
     async addGame(postbody) {
@@ -144,9 +144,9 @@ class GameService {
     // ******************************* PRIVATE METHODS *********************************************************
 
     async saveGame(game) {
-        const saveGameResult = await this.dbdao.replaceOne(this.database, this.collection, { _id: new ObjectId(game._id) }, game);
-        if (saveGameResult.result.ok === 1) {
-            // return saveGameResult.ops[0];
+        console.log(game._id.toString());
+        const saveGameResult = await this.dbdao.replaceOne(this.database, this.collection, { _id: game._id }, game);
+        if (saveGameResult.acknowledged) {
             return game;
         } else {
             throw { error: 'mongo db save game error'}
