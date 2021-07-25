@@ -1,5 +1,5 @@
 const DBDao = require('../../dao/db-dao')
-
+const { ObjectId } = require('mongodb');
 
 describe('dbdao connect', () => {
 
@@ -48,12 +48,22 @@ describe('dbdao insert', () => {
 
   test('promise resolves when insert is successful', async () => {
 
+    const insertedDoc = {
+      email: 'test@test.com'
+    }
+
+    const objectId = new ObjectId('60fc21a06097ca7bdc2dacca');
+
+    const returnedDoc = {
+      _id: objectId,
+      email: 'test@test.com'
+    }
+
     const dbCollectionMock = {
       insertOne: jest.fn(() => {
         return {
-          ops: [
-            "insert"
-          ]
+          acknowledged: true,
+          insertedId: objectId
         }
       })
     };
@@ -68,7 +78,7 @@ describe('dbdao insert', () => {
 
     const dbdao = new DBDao(clientMock);
 
-    await expect(dbdao.insert('db', 'collection', {})).resolves.toEqual('insert');
+    await expect(dbdao.insert('db', 'collection', insertedDoc)).resolves.toEqual(returnedDoc);
 
 
 

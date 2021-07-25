@@ -10,8 +10,8 @@ class DBDao {
     }
 
     async connect() {
-        console.log('Attempting to connect to mongo db');
         await this.client.connect();
+        console.log('Connected to mongo db');
     }
 
     async disconnect() {
@@ -23,7 +23,10 @@ class DBDao {
         try {
             const dbCollection = this.getDBCollection(database, collection);
             const dbres = await dbCollection.insertOne(document);
-            return dbres.ops[0];
+            if (dbres.acknowledged) {
+                document._id = dbres.insertedId;
+                return document;
+            }
         } catch (err) {
             console.log(err);
             throw err;
@@ -34,7 +37,7 @@ class DBDao {
 
         const dbCollection = this.getDBCollection(database, collection);
         return await dbCollection.findOne(searchCriteria);
-
+    
     }
 
     async findWithSearchCriteria(database, collection, searchCriteria) {
@@ -61,7 +64,7 @@ class DBDao {
             "$set": {}
         };
         updateQuery.$set = updates;
-        const updated = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnOriginal: false });
+        const updated = await dbCollection.findOneAndUpdate(findQuery, updateQuery, { returnNewDocument: true, new: true, returnOriginal: false, returnDocument: 'after' });
         return updated;
     }
 

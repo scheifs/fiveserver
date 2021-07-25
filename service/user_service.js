@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const ObjectId = require('mongodb').ObjectID;
+const { ObjectId } = require('mongodb');
 
 class UserService {
 
@@ -27,7 +27,7 @@ class UserService {
     }
 
     async getUserById(id) {
-        return await this.dbdao.findOneWithSearchCriteria(this.database, 'users', { _id: new ObjectId(id) });
+        return await this.dbdao.findOneWithSearchCriteria(this.database, 'users', { _id: ObjectId(id) });
     }
 
     async getUserByEmail(email) {
@@ -39,7 +39,7 @@ class UserService {
     }
 
     async updateUser(userid, updates) {
-        const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: new ObjectId(userid) }, updates);
+        const updateResponse = await this.dbdao.findOneAndUpdate(this.database, this.collection, { _id: ObjectId(userid) }, updates);
         if (updateResponse.ok === 1) {
             return updateResponse.value;
         } else {
@@ -48,9 +48,9 @@ class UserService {
     }
 
     async addGame(userid, gameid) {
-        const validGame = await this.dbdao.findOneWithSearchCriteria(this.database, 'games', { _id: new ObjectId(gameid) });
+        const validGame = await this.dbdao.findOneWithSearchCriteria(this.database, 'games', { _id: gameid });
         if (validGame) {
-            return await this.dbdao.addToSet(this.database, this.collection, { _id: new ObjectId(userid) }, { games: gameid });
+            return await this.dbdao.addToSet(this.database, this.collection, { _id: userid }, { games: gameid });
         } else {
             throw { error: `gameid: ${gameid} not valid` }
         }

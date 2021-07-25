@@ -93,7 +93,6 @@ When('the player plays a high card into an empty lower space', async function ()
 
     const player = gameService.findPlayerWithPlayerId(game, game.playersTurnId);
     const sortedCards = player.cards.sort();
-    console.log(sortedCards);
 
     const movePayload = {
         move: 'Play',
@@ -135,9 +134,6 @@ When('the player plays a card they dont hold', async function () {
 
 When('player one plays a valid move', async function () {
 
-    console.log(`===== PLAYER 1 MOVE ======== ${game.playersTurnId}`);
-    console.log(JSON.stringify(game.moves));
-
     const player = gameService.findPlayerWithPlayerId(game, game.playersTurnId);
     const sortedCards = player.cards.sort();
 
@@ -147,24 +143,17 @@ When('player one plays a valid move', async function () {
         boardNumber: sortedCards[3]
     }
 
-    console.log(movePayload);
     gameResponse = await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
         headers: {
             "X-Auth-Token": user1.token
         }
     });
     game = gameResponse.data;
-    console.log(`Player 1 http status ${gameResponse.status}`);
     httpStatus = gameResponse.status;
-
-    console.log("===== PLAYER 1 MOVE DONE ========")
 
 });
 
 When('player two plays a valid move', async function () {
-
-    console.log(`===== PLAYER 2 MOVE ======== ${game.playersTurnId}`);
-    console.log(JSON.stringify(game.moves));
 
     const player = gameService.findPlayerWithPlayerId(game, game.playersTurnId);
     const sortedCards = player.cards.sort();
@@ -175,18 +164,13 @@ When('player two plays a valid move', async function () {
         boardNumber: sortedCards[3]
     };
 
-    console.log(movePayload);
-
     gameResponse = await axios.post(`${endpoint}/api/games/${game._id}/move`, movePayload, {
         headers: {
             "X-Auth-Token": user2.token
         }
     });
     game = gameResponse.data;
-    console.log(`Player 2 http status ${gameResponse.status}`);
     httpStatus = gameResponse.status;
-
-    console.log("===== PLAYER 2 MOVE DONE ========")
 
 });
 

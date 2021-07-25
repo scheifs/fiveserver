@@ -131,9 +131,11 @@ When('the client request to update an existing user via PATCH \\/api\\/users\\/:
         const patchedUser = await patchUser(testUser.data._id, token, {
             email: 'test2@test.com'
         });
+        console.log(patchedUser);
         expect(patchedUser.data.email).toBe('test2@test.com');
         httpStatus = patchedUser.status;
     } catch (err) {
+        console.log(err);
         httpStatus = err.response.status;
     }
 

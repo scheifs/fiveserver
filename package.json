@@ -7,7 +7,7 @@
     "start": "node apiserver.js",
     "test": "jest --coverage",
     "debug": "set DEBUG=fiveserver && nodemon --inspect apiserver.js",
-    "cucumber": "./node_modules/.bin/cucumber-js"
+    "cucumber": "cucumber-js"
   },
   "repository": {
     "type": "git",

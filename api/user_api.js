@@ -1,5 +1,4 @@
 exports.getUser = async (req, res, next, userService) => {
-    console.log('get user');
     try {
         const user = await userService.getUserById(req.five.id);
         res.send(200, user);
@@ -42,7 +41,7 @@ exports.deleteUsers = async (req, res, next, userService) => {
 
 exports.updateUser = async (req, res, next, userService) => {
     // TODO: check to make sure password is not being updated.. special case...
-    console.log(req.body);
+    // console.log(req.body);
     if (req.body && (req.body.passwordHash !== undefined || req.body.salt !== undefined)) {
         res.send(400);
         next();
