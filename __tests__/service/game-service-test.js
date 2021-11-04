@@ -51,7 +51,7 @@ test('move - draw success', async () => {
     }
 
     const dbdaoMock = {
-        replaceOne: jest.fn(() => { return { result: { ok: 1 } } })
+        replaceOne: jest.fn(() => { return { acknowledged: true, matchedCount: 1}})
     }
 
     const gs = new gameService(dbdaoMock);
@@ -67,6 +67,7 @@ test('move - draw success', async () => {
 test('move - play card success', async () => {
 
     const game = {
+        _id: 2,
         deck: [23],
         moves: [],
         turnNumber: 1,
@@ -84,7 +85,7 @@ test('move - play card success', async () => {
     }
 
     const dbdaoMock = {
-        replaceOne: jest.fn(() => { return { result: { ok: 1 } } })
+        replaceOne: jest.fn(() => { return { acknowledged: true, matchedCount: 1}})
     }
 
     const gs = new gameService(dbdaoMock);

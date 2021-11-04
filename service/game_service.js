@@ -144,9 +144,9 @@ class GameService {
     // ******************************* PRIVATE METHODS *********************************************************
 
     async saveGame(game) {
-        console.log(game._id.toString());
+        console.log(game._id);
         const saveGameResult = await this.dbdao.replaceOne(this.database, this.collection, { _id: game._id }, game);
-        if (saveGameResult.acknowledged) {
+        if (saveGameResult?.matchedCount === 1) {
             return game;
         } else {
             throw { error: 'mongo db save game error'}

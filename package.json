@@ -21,15 +21,16 @@
   "homepage": "https://github.com/scheifs/fiveserver#readme",
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.1",
-    "axios": "^0.21.1",
-    "eslint": "^7.31.0",
-    "jest": "^27.0.6"
+    "axios": "^0.24.0",
+    "eslint": "^8.1.0",
+    "jest": "^27.3.1"
   },
   "dependencies": {
+    "ci": "^2.1.1",
     "crypto": "^1.0.1",
     "debug": "^4.3.2",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^4.0.1",
-    "restify": "^8.5.1"
+    "mongodb": "^4.1.4",
+    "restify": "^8.6.0"
   }
 }
