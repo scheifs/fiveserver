@@ -23,7 +23,7 @@ class DBDao {
         try {
             const dbCollection = this.getDBCollection(database, collection);
             const dbres = await dbCollection.insertOne(document);
-            if (dbres.acknowledged) {
+            if (dbres?.insertedId) {
                 document._id = dbres.insertedId;
                 return document;
             }

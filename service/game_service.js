@@ -160,7 +160,7 @@ class GameService {
 
     }
 
-    async drawCard(game, playerId, movePayload) {
+    async drawCard(game, playerId) {
         debug(game,playerId);
         const player = GameService.findPlayerWithPlayerId(game, playerId);
         if (player.cards.length >= 4) {
