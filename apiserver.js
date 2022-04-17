@@ -18,10 +18,29 @@ const gameService = new GameService(dbdao, database, 'games');
 
 const server = restify.createServer();
 
+const corsMiddleware = require('restify-cors-middleware2');
+
+const cors = corsMiddleware({
+  preflightMaxAge: 5,
+  origins: ['*'],
+  allowHeaders: [
+      'Accept',
+      'Content-Type',
+      'Origin',
+      'Authorization',
+  ],
+  exposeHeaders: [],
+  credentials: true,
+  allowCredentialsAllOrigins: true,
+});
+server.pre(cors.preflight);
+server.use(cors.actual);
+
 server.pre(restify.plugins.pre.sanitizePath()); // Cleans up sloppy URLs on the request object, like /foo////bar/// to /foo/bar.
 
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
+
 server.use((req,res,next) => authApi.authorizeApiRequest(req, res, next));
 
 server.get('/api/health', (req, res) => {

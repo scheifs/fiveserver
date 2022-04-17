@@ -1,3 +1,5 @@
+const debug = require('debug')('fiveserver');
+
 exports.getUser = async (req, res, next, userService) => {
     try {
         const user = await userService.getUserById(req.five.id);
@@ -13,7 +15,9 @@ exports.getUser = async (req, res, next, userService) => {
 
 exports.addUser = async (req, res, next, userService) => {
     try {
+        debug(`addUser: ${JSON.stringify(req.body)}`)
         const user = await userService.addUser(req.body);
+        res.header('Location', user._id);
         res.send(201, user);
     } catch (err) {
         if (err.error === 'duplicate user') {

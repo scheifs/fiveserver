@@ -61,5 +61,4 @@ exports.move = async (req, res, next, gameService) => {
         next();
     }
 
-
 }

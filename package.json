@@ -20,17 +20,16 @@
   },
   "homepage": "https://github.com/scheifs/fiveserver#readme",
   "devDependencies": {
-    "@cucumber/cucumber": "^7.3.1",
-    "axios": "^0.24.0",
-    "eslint": "^8.1.0",
-    "jest": "^27.3.1"
+    "@cucumber/cucumber": "^8.0.0",
+    "axios": "^0.26.1",
+    "eslint": "^8.13.0",
+    "jest": "^27.5.1"
   },
   "dependencies": {
-    "ci": "^2.1.1",
-    "crypto": "^1.0.1",
-    "debug": "^4.3.2",
+    "debug": "^4.3.4",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^4.1.4",
-    "restify": "^8.6.0"
+    "mongodb": "^4.5.0",
+    "restify": "^8.6.1",
+    "restify-cors-middleware2": "^2.1.2"
   }
 }

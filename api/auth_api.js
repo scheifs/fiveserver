@@ -23,7 +23,6 @@ exports.authorizeApiRequest = async (req, res, next) => {
             }
         });
     }
-
 }
 
 exports.getToken = async (req, res, next, userService) => {
@@ -46,5 +45,4 @@ exports.getToken = async (req, res, next, userService) => {
             res.end();
         }
     }
-
 }
