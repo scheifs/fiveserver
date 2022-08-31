@@ -90,5 +90,41 @@ test('addGame: async function rejects when game not found', async () => {
 
 });
 
+test('updateUser: success', async () => {
+
+    const dbRes = {
+        ok: 1,
+        value: 'value'
+    };
+
+    this.userService = new UserService({
+        findOneAndUpdate: jest.fn(() => dbRes)
+    });
+
+    const res = await this.userService.updateUser(1,{});
+
+    expect(dbRes).toBe(dbRes);
+
+});
+
+test('updateUser: failure', async () => {
+
+    const dbRes = {
+        ok: 0
+    };
+
+    this.userService = new UserService({
+        findOneAndUpdate: jest.fn(() => dbRes)
+    });
+
+    expect.assertions(1);
+    try {
+        await this.userService.updateUser(1, {});
+    } catch (e) {
+        expect(e.error).toMatch(/update failed/);
+    }
+
+});
+
 
 

@@ -1,4 +1,25 @@
+const GameService = require('../../service/game_service');
 const gameService = require('../../service/game_service');
+
+test('addGame: success', async () => {
+
+    const gs = new GameService({
+        insert: jest.fn(() => "returnedGame")
+    })
+    gs.getNewShuffledDeck = jest.fn();
+    gs.dealToPlayers = jest.fn();
+
+    const insertedGame = await gs.addGame({
+        players: [{ userid: 1}],
+
+    })
+
+    expect("returnedGame").toBe(insertedGame);
+
+    expect(gs.getNewShuffledDeck).toHaveBeenCalledTimes(1);
+    expect(gs.dealToPlayers).toHaveBeenCalledTimes(1);
+
+});
 
 test('move - throw not supported exception', async () => {
 
