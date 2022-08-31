@@ -1,5 +1,4 @@
-const { setDefaultTimeout, Given, When, Then, AfterAll, After } = require("@cucumber/cucumber");
-const expect = require('expect');
+const { Given, When, Then, AfterAll } = require("@cucumber/cucumber");
 const UserService = require('../../service/user_service');
 const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
@@ -9,6 +8,7 @@ const client = new MongoClient(url, { useUnifiedTopology: true });
 const dbdao = new DBDAO(client);
 const userService = new UserService(dbdao, 'fiveatdd', 'users');
 const gameService = require('../../service/game_service');
+const assert = require('assert');
 
 const endpoint = 'http://localhost:8080';
 let httpStatus;
@@ -218,7 +218,7 @@ When('move played into occupied board number', async function () {
 
 
 Then('the game response should be HTTP {string}', function (status) {
-    expect(httpStatus).toBe(Number(status));
+    assert.equal(status, httpStatus);
 });
 
 AfterAll(async () => {

@@ -7,7 +7,7 @@
     "start": "node apiserver.js",
     "test": "jest --coverage",
     "debug": "set DEBUG=fiveserver && nodemon --inspect apiserver.js",
-    "cucumber": "cucumber-js"
+    "cucumber": "npx cucumber-js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
+    "dotenv": "^16.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.9.0",
     "restify": "^8.6.1",

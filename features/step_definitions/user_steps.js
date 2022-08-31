@@ -1,5 +1,5 @@
-const { setDefaultTimeout, Given, When, Then, AfterAll, After } = require("@cucumber/cucumber");
-const expect = require('expect');
+const { Given, When, Then, AfterAll, After } = require("@cucumber/cucumber");
+const assert = require('assert');
 const UserService = require('../../service/user_service');
 const axios = require('axios');
 const MongoClient = require('mongodb').MongoClient;
@@ -65,18 +65,22 @@ When('the client request to get a json web token', async () => {
         password: 'abc123'
     });
     httpStatus = tokenResponse.status;
-    expect(tokenResponse.data.token).toBeDefined();
+
+    assert.notEqual(tokenResponse.data.token, null);
+    
 });
 
 When('the client request to add a nonexisting user via POST \\/api\\/users', async () => {
     await deleteTestUser();
     const addUserResponse = await addTestUser();
 
-    expect(addUserResponse.data.email).toBe('test@test.com');
-    expect(addUserResponse.data.nickname).toBe('test');
-    expect(addUserResponse.data.passwordHash).toBeDefined();
-    expect(addUserResponse.data.salt).toBeDefined();
-    expect(addUserResponse.data._id).toBeDefined();
+    assert.equal(addUserResponse.data.email, 'test@test.com');
+    assert.equal(addUserResponse.data.nickname, 'test');
+
+    assert.notEqual(addUserResponse.data.passwordHash, undefined);
+    assert.notEqual(addUserResponse.data.salt, undefined);
+    assert.notEqual(addUserResponse.data._id, undefined);
+    
     httpStatus = addUserResponse.status;
 });
 
@@ -101,7 +105,7 @@ When('the client request to get an existing user via GET \\/api\\/users\\/:useri
     try {
         const getUserResponse = await getTestUser(testUser.data._id, token);
         httpStatus = getUserResponse.status;
-        expect(getUserResponse.data.email).toBe('test@test.com');
+        assert.equal(getUserResponse.data.email, 'test@test.com')
     } catch (err) {
         httpStatus = err.response.status;
     }
@@ -125,13 +129,13 @@ When('the client request to update an existing user via PATCH \\/api\\/users\\/:
     await deleteTestUser();
     const testUser = await addTestUser();
 
-    expect(testUser.data.email).toBe('test@test.com');
+    assert.equal(testUser.data.email,'test@test.com');
     const token = await getTestToken(testUser.data._id);
     try {
         const patchedUser = await patchUser(testUser.data._id, token, {
             email: 'test2@test.com'
         });
-        expect(patchedUser.data.email).toBe('test2@test.com');
+        assert.equal(patchedUser.data.email,'test2@test.com');
         httpStatus = patchedUser.status;
     } catch (err) {
         console.log(err);
@@ -151,7 +155,7 @@ When('the client request to update an existing user passwordHash\\/salt via PATC
             passwordHash: `newhash`,
             salt: `pepper`
         });
-        expect(patchedUser.data.email).toBe('test2@test.com');
+        assert.equal(patchedUser.data.email, 'test2@test.com');
         httpStatus = patchedUser.status;
     } catch (err) {
         httpStatus = err.response.status;
@@ -160,7 +164,7 @@ When('the client request to update an existing user passwordHash\\/salt via PATC
 });
 
 Then('the response should be HTTP {string}', function (status) {
-    expect(Number(httpStatus)).toBe(Number(status));
+    assert.equal(Number(httpStatus), Number(status));
 });
 
 After(async () => {

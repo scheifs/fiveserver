@@ -1,3 +1,4 @@
+require('dotenv').config();
 const process = require('process');
 const restify = require('restify');
 const userApi = require('./api/user_api');
