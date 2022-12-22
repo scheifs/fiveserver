@@ -28,7 +28,7 @@
   "dependencies": {
     "debug": "^4.3.4",
     "dotenv": "^16.0.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.9.0",
     "restify": "^8.6.1",
     "restify-cors-middleware2": "^2.1.2"
