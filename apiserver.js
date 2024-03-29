@@ -44,7 +44,7 @@ server.use(restify.plugins.queryParser());
 
 server.use((req,res,next) => authApi.authorizeApiRequest(req, res, next));
 
-server.get('/api/health', (req, res) => {
+server.get('/api/health', (req, res, next) => {
   res.send(200);
 });
 
